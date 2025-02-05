@@ -61,7 +61,6 @@ dependencies {
 
 //    Dagger Hilt
     implementation(libs.hilt.android)
-    implementation(libs.androidx.hilt.lifecycle.viewmodel)
     ksp(libs.hilt.android.compiler)
     ksp(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
@@ -93,6 +92,7 @@ dependencies {
     annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
-
+//    Navigation
+    implementation(libs.androidx.navigation.compose)
 
 }
