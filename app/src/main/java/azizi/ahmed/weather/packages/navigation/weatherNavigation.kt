@@ -2,6 +2,7 @@ package azizi.ahmed.weather.packages.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -11,6 +12,7 @@ import azizi.ahmed.weather.packages.screens.mainScreen.MainScreen
 import azizi.ahmed.weather.packages.screens.searchScreen.SearchScreen
 import azizi.ahmed.weather.packages.screens.settingsScreen.SettingsScreen
 import azizi.ahmed.weather.packages.screens.splashScreen.SplashScreen
+import azizi.ahmed.weather.packages.viewModel.MainScreenViewModel
 
 @Composable
 fun WeatherNavigation(
@@ -31,6 +33,12 @@ fun WeatherNavigation(
         }
 
         composable(
+            route = WeatherScreens.MainScreen.route
+        ) {
+            MainScreen()
+        }
+
+        composable(
             route = WeatherScreens.AboutAppScreen.route
         ) {
             AboutAppScreen(
@@ -44,12 +52,6 @@ fun WeatherNavigation(
             FavoriteScreen(
                 navController = navController
             )
-        }
-
-        composable(
-            route = WeatherScreens.MainScreen.route
-        ) {
-            MainScreen()
         }
 
         composable(
