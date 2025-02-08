@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import azizi.ahmed.weather.packages.model.Weather
 import azizi.ahmed.weather.R
+import azizi.ahmed.weather.packages.utils.formatMilesToKm
 
 @Composable
 fun HumidityWindPressureRow(
@@ -63,7 +64,7 @@ fun HumidityWindPressureRow(
                 tint = Color.LightGray
             )
             Text(
-                text = "${weather.list[0].humidity} m/h",
+                text = "${formatMilesToKm(weather.list[0].speed)} km/h",
                 color = Color.LightGray
             )
         }
