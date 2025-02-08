@@ -3,7 +3,7 @@ package azizi.ahmed.weather.packages.model
 data class WeatherItem(
     val clouds: Int,
     val deg: Int,
-    val dt: Int,
+    val date: Int,
     val feelsLike: FeelsLike,
     val gust: Double,
     val humidity: Int,
