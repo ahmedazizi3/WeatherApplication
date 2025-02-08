@@ -20,6 +20,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import azizi.ahmed.weather.packages.components.mainScreen.WeatherDropDownMenu
 
 
 @Composable
@@ -38,11 +41,26 @@ fun WeatherTopBar(
     icon2: ImageVector? = null,
     isMainScreen: Boolean = true,
     elevation: Dp = 0.dp,
-    onAddClicked: () -> Unit = {},
     onIcon1Clicked: () -> Unit = {},
-    onIcon2Clicked: () -> Unit = {},
+    onIcon3Clicked: () -> Unit = {},
+    navigateToFavoriteScreen: () -> Unit = {},
+    navigateToAboutScreen: () -> Unit = {},
+    navigateToSettingScreen: () -> Unit = {},
+    border: BorderStroke? = null
+) {
+    val showDialog = remember {
+        mutableStateOf(false)
+    }
 
-    ) {
+    if(showDialog.value) {
+        WeatherDropDownMenu(
+            showDialog = showDialog,
+            navigateToFavoriteScreen = navigateToFavoriteScreen,
+            navigateToAboutScreen = navigateToAboutScreen,
+            navigateToSettingScreen = navigateToSettingScreen
+        )
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -57,10 +75,7 @@ fun WeatherTopBar(
             disabledContainerColor = Color.Transparent,
             disabledContentColor = Color.DarkGray,
         ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = Color.LightGray
-        )
+        border = border
     ) {
         Box(
             modifier = modifier
@@ -96,7 +111,7 @@ fun WeatherTopBar(
                     if (icon1 != null) {
                         IconButton(
                             onClick = {
-                                onIcon1Clicked()
+                                onIcon1Clicked.invoke()
                             }
                         ) {
                             Icon(
@@ -113,7 +128,8 @@ fun WeatherTopBar(
                     if (icon2 != null) {
                         IconButton(
                             onClick = {
-                                onIcon2Clicked()
+                                showDialog.value = true
+
                             }
                         ) {
                             Icon(
@@ -138,7 +154,7 @@ fun WeatherTopBar(
                 if (!isMainScreen) {
                     IconButton(
                         onClick = {
-
+                            onIcon3Clicked.invoke()
                         }
                     ) {
                         Icon(
