@@ -1,7 +1,6 @@
 package azizi.ahmed.weather.packages.network
 
 import azizi.ahmed.weather.packages.model.Weather
-import azizi.ahmed.weather.packages.model.WeatherObject
 import azizi.ahmed.weather.packages.utils.Constants
 import retrofit2.http.GET
 import retrofit2.http.Query
