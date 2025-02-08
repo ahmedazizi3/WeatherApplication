@@ -1,5 +1,6 @@
 package azizi.ahmed.weather.packages.screens.mainScreen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,16 +45,16 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
     navController: NavController = rememberNavController(),
+    city: String?,
     navigateToSearchScreen: () -> Unit = {},
     navigateToFavoriteScreen: () -> Unit = {},
     navigateToAboutScreen: () -> Unit = {},
-    navigateToSettingsScreen: () -> Unit = {},
+    navigateToSettingsScreen: () -> Unit = {}
 ) {
-
     val weatherData = produceState<WeatherDataOrException<Weather, Boolean, Exception>>(
         initialValue = WeatherDataOrException(loading = true)
     ) {
-        value = mainScreenViewModel.getWeatherData(city = "Ouargla")
+        value = mainScreenViewModel.getWeatherData(city = city.toString())
     }.value
 
 
@@ -87,9 +88,15 @@ fun MainScreen(
                     elevation = 0.dp,
                     isMainScreen = true,
                     onIcon1Clicked = {
-                        navigateToSearchScreen()
+                        navigateToSearchScreen.invoke()
                     },
-                    onIcon2Clicked = {}
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = Color.LightGray
+                    ),
+                    navigateToFavoriteScreen = navigateToFavoriteScreen,
+                    navigateToAboutScreen = navigateToAboutScreen,
+                    navigateToSettingScreen = navigateToSettingsScreen
                 )
             }
         ) {
