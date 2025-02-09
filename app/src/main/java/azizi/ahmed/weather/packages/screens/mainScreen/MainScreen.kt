@@ -111,7 +111,7 @@ fun MainScreen(
                 Spacer(modifier = modifier.height(10.dp))
 
                 Text(
-                    text = dateFormatter(weatherData.data!!.list[0].date.toLong()) ,
+                    text = dateFormatter(weatherData.data!!.list[0].dt.toLong()),
                     fontWeight = FontWeight.Normal,
                     fontSize = 20.sp,
                     color = Color.LightGray

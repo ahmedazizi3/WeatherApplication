@@ -45,7 +45,7 @@ fun DayRow(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = dayNameFormatter(weather.date.toLong()),
+                text = dayNameFormatter(weather.dt.toLong()),
                 color = Color.Black,
                 fontSize = 25.sp
             )
