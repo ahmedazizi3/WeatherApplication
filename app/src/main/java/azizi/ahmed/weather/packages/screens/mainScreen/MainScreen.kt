@@ -1,5 +1,8 @@
 package azizi.ahmed.weather.packages.screens.mainScreen
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,12 +26,15 @@ import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import azizi.ahmed.weather.R
 import azizi.ahmed.weather.packages.components.common.WeatherTopBar
 import azizi.ahmed.weather.packages.components.mainScreen.DayRow
 import azizi.ahmed.weather.packages.components.mainScreen.HumidityWindPressureRow
@@ -56,6 +62,9 @@ fun MainScreen(
     ) {
         value = mainScreenViewModel.getWeatherData(city = city.toString())
     }.value
+
+    val context = LocalContext.current
+    val url = stringResource(id = R.string.apiUsed)
 
 
     if(weatherData.loading == true) {
@@ -95,7 +104,14 @@ fun MainScreen(
                         color = Color.LightGray
                     ),
                     navigateToFavoriteScreen = navigateToFavoriteScreen,
-                    navigateToAboutScreen = navigateToAboutScreen,
+                    navigateToAboutScreen = {
+                        try {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            context.startActivity(intent)
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "Invalid URL", Toast.LENGTH_SHORT).show()
+                        }
+                    },
                     navigateToSettingScreen = navigateToSettingsScreen
                 )
             }
