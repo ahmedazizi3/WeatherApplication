@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -30,7 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import azizi.ahmed.weather.packages.components.mainScreen.WeatherDropDownMenu
+import azizi.ahmed.weather.packages.screensAndViewModel.favorites.FavoritesViewModel
 
 
 @Composable
@@ -40,6 +43,7 @@ fun WeatherTopBar(
     icon1: ImageVector? = null,
     icon2: ImageVector? = null,
     isMainScreen: Boolean = true,
+    favoritesViewModel: FavoritesViewModel = hiltViewModel(),
     elevation: Dp = 0.dp,
     onIcon1Clicked: () -> Unit = {},
     onIcon3Clicked: () -> Unit = {},
@@ -51,6 +55,9 @@ fun WeatherTopBar(
     val showDialog = remember {
         mutableStateOf(false)
     }
+
+
+
 
     if(showDialog.value) {
         WeatherDropDownMenu(
@@ -161,6 +168,18 @@ fun WeatherTopBar(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "",
                             tint = Color.LightGray
+                        )
+                    }
+                } else {
+                    IconButton(
+                        onClick = {
+                            onIcon3Clicked.invoke()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.FavoriteBorder,
+                            contentDescription = "",
+                            tint = Color.Red
                         )
                     }
                 }
