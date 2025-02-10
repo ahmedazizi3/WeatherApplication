@@ -7,11 +7,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import azizi.ahmed.weather.packages.screens.favoriteScreen.FavoritesScreen
-import azizi.ahmed.weather.packages.screens.mainScreen.MainScreen
-import azizi.ahmed.weather.packages.screens.searchScreen.SearchScreen
-import azizi.ahmed.weather.packages.screens.settingsScreen.SettingsScreen
-import azizi.ahmed.weather.packages.screens.splashScreen.SplashScreen
+import azizi.ahmed.weather.packages.screensAndViewModel.favorites.FavoritesScreen
+import azizi.ahmed.weather.packages.screensAndViewModel.main.MainScreen
+import azizi.ahmed.weather.packages.screensAndViewModel.search.SearchScreen
+import azizi.ahmed.weather.packages.screensAndViewModel.settings.SettingsScreen
+import azizi.ahmed.weather.packages.screensAndViewModel.splash.SplashScreen
 
 @Composable
 fun WeatherNavigation(

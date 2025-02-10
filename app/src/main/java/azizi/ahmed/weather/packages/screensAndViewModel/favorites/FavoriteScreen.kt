@@ -1,4 +1,4 @@
-package azizi.ahmed.weather.packages.screens.favoriteScreen
+package azizi.ahmed.weather.packages.screensAndViewModel.favorites
 
 
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package azizi.ahmed.weather.packages.screens.searchScreen
+package azizi.ahmed.weather.packages.screensAndViewModel.search
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package azizi.ahmed.weather.packages.screens.settingsScreen
+package azizi.ahmed.weather.packages.screensAndViewModel.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

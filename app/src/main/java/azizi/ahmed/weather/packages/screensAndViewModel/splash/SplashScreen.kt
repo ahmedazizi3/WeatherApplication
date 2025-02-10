@@ -1,4 +1,4 @@
-package azizi.ahmed.weather.packages.screens.splashScreen
+package azizi.ahmed.weather.packages.screensAndViewModel.splash
 
 import android.view.animation.OvershootInterpolator
 import androidx.compose.foundation.BorderStroke

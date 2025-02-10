@@ -8,7 +8,5 @@ import azizi.ahmed.weather.packages.navigation.WeatherNavigation
 fun WeatherMainApp(
     modifier: Modifier = Modifier
 ) {
-    WeatherNavigation(
-        modifier = modifier
-    )
+    WeatherNavigation()
 }

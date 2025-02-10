@@ -1,4 +1,4 @@
-package azizi.ahmed.weather.packages.screens.mainScreen
+package azizi.ahmed.weather.packages.screensAndViewModel.main
 
 import android.content.Intent
 import android.net.Uri
@@ -43,13 +43,13 @@ import azizi.ahmed.weather.packages.components.mainScreen.TopCircle
 import azizi.ahmed.weather.packages.data.WeatherDataOrException
 import azizi.ahmed.weather.packages.model.Weather
 import azizi.ahmed.weather.packages.model.WeatherItem
+import azizi.ahmed.weather.packages.screensAndViewModel.favorites.FavoritesViewModel
 import azizi.ahmed.weather.packages.utils.dateFormatter
-import azizi.ahmed.weather.packages.viewModel.MainScreenViewModel
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
+    mainScreenViewModel: MainViewModel = hiltViewModel(),
     navController: NavController = rememberNavController(),
     city: String?,
     navigateToSearchScreen: () -> Unit = {},
@@ -62,6 +62,7 @@ fun MainScreen(
     ) {
         value = mainScreenViewModel.getWeatherData(city = city.toString())
     }.value
+
 
     val context = LocalContext.current
     val url = stringResource(id = R.string.apiUsed)
