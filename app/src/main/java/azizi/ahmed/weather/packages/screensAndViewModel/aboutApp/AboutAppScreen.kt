@@ -1,4 +1,4 @@
-package azizi.ahmed.weather.packages.screens.aboutScreen
+package azizi.ahmed.weather.packages.screensAndViewModel.aboutApp
 
 import android.content.Intent
 import android.net.Uri
