@@ -2,6 +2,7 @@ package azizi.ahmed.weather.packages.screensAndViewModel.main
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -22,7 +23,12 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,8 +38,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import azizi.ahmed.weather.R
 import azizi.ahmed.weather.packages.components.common.WeatherTopBar
 import azizi.ahmed.weather.packages.components.mainScreen.DayRow
@@ -43,130 +47,153 @@ import azizi.ahmed.weather.packages.components.mainScreen.TopCircle
 import azizi.ahmed.weather.packages.data.WeatherDataOrException
 import azizi.ahmed.weather.packages.model.Weather
 import azizi.ahmed.weather.packages.model.WeatherItem
-import azizi.ahmed.weather.packages.screensAndViewModel.favorites.FavoritesViewModel
+import azizi.ahmed.weather.packages.screensAndViewModel.settings.UnitsViewModel
 import azizi.ahmed.weather.packages.utils.dateFormatter
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     mainScreenViewModel: MainViewModel = hiltViewModel(),
-    navController: NavController = rememberNavController(),
+    settingsViewModel: UnitsViewModel = hiltViewModel(),
     city: String?,
     navigateToSearchScreen: () -> Unit = {},
     navigateToFavoriteScreen: () -> Unit = {},
     navigateToAboutScreen: () -> Unit = {},
     navigateToSettingsScreen: () -> Unit = {}
 ) {
-    val weatherData = produceState<WeatherDataOrException<Weather, Boolean, Exception>>(
-        initialValue = WeatherDataOrException(loading = true)
-    ) {
-        value = mainScreenViewModel.getWeatherData(city = city.toString())
-    }.value
 
 
-    val context = LocalContext.current
-    val url = stringResource(id = R.string.apiUsed)
+    val unitFromDB = settingsViewModel.unitList.collectAsState().value
 
+    val currentCity: String = if (city!!.isBlank()) "Ouargla" else city
 
-    if(weatherData.loading == true) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+    var unit by remember {
+        mutableStateOf("Metric")
+    }
+
+    var isCelsius by remember {
+        mutableStateOf(false)
+    }
+
+    if(unitFromDB.isNotEmpty()) {
+        unit = unitFromDB[0].unit.split(" ")[0].lowercase()
+
+        isCelsius = unit == "metric"
+
+        val context = LocalContext.current
+
+        val url = stringResource(id = R.string.apiUsed)
+
+        val weatherData = produceState<WeatherDataOrException<Weather, Boolean, Exception>>(
+            initialValue = WeatherDataOrException(loading = true)
         ) {
-            CircularProgressIndicator(
-                color = Color.LightGray
+            value = mainScreenViewModel.getWeatherData(
+                city = currentCity,
+                unit = unit
             )
-        }
-    } else if(weatherData.data != null) {
-        Spacer(
-            modifier = modifier
-                .height(20.dp)
-                .background(Color.Transparent)
-        )
-        Scaffold(
-            modifier = modifier
-                .fillMaxSize()
-                .background(Color.White),
-            topBar = {
-                WeatherTopBar(
-                    title = "${weatherData.data!!.city.name}, ${weatherData.data!!.city.country}",
-                    icon1 = Icons.Default.Search,
-                    icon2 = Icons.Default.MoreVert,
-                    elevation = 0.dp,
-                    isMainScreen = true,
-                    onIcon1Clicked = {
-                        navigateToSearchScreen.invoke()
-                    },
-                    border = BorderStroke(
-                        width = 1.dp,
-                        color = Color.LightGray
-                    ),
-                    navigateToFavoriteScreen = navigateToFavoriteScreen,
-                    navigateToAboutScreen = {
-                        try {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                            context.startActivity(intent)
-                        } catch (e: Exception) {
-                            Toast.makeText(context, "Invalid URL", Toast.LENGTH_SHORT).show()
-                        }
-                    },
-                    navigateToSettingScreen = navigateToSettingsScreen
-                )
-            }
-        ) {
+        }.value
+
+        if(weatherData.loading == true) {
             Column(
                 modifier = modifier
                     .fillMaxSize()
-                    .background(Color.White)
-                    .padding(it),
+                    .background(Color.White),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.Center
             ) {
-                Spacer(modifier = modifier.height(10.dp))
-
-                Text(
-                    text = dateFormatter(weatherData.data!!.list[0].dt.toLong()),
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 20.sp,
+                CircularProgressIndicator(
                     color = Color.LightGray
                 )
-
-                TopCircle(
-                    data = weatherData.data!!
-                )
-
-                HumidityWindPressureRow(weather = weatherData.data!!)
-
-                HorizontalDivider(
-                    color = Color.LightGray
-                )
-
-                SunSetAndSunRiseRow(
-                    weather = weatherData.data!!
-                )
-
-                Text(
-                    text = "7 Days Forecast",
-                    color = Color.LightGray,
-                    fontSize = 25.sp
-                )
-
-                Spacer(modifier = modifier.height(10.dp))
-
-                LazyColumn(
+            }
+        } else if(weatherData.data != null) {
+            Log.d("TAG", "MainScreen: ${weatherData.data!!.list[0].weather[0].description}")
+            Spacer(
+                modifier = modifier
+                    .height(20.dp)
+                    .background(Color.Transparent)
+            )
+            Scaffold(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(Color.White),
+                topBar = {
+                    WeatherTopBar(
+                        title = "${weatherData.data!!.city.name}, ${weatherData.data!!.city.country}",
+                        icon1 = Icons.Default.Search,
+                        icon2 = Icons.Default.MoreVert,
+                        elevation = 0.dp,
+                        isMainScreen = true,
+                        onIcon1Clicked = {
+                            navigateToSearchScreen.invoke()
+                        },
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = Color.LightGray
+                        ),
+                        navigateToFavoriteScreen = navigateToFavoriteScreen,
+                        navigateToAboutScreen = {
+                            try {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                context.startActivity(intent)
+                            } catch (e: Exception) {
+                                Toast.makeText(context, "Invalid URL", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        navigateToSettingScreen = navigateToSettingsScreen
+                    )
+                }
+            ) {
+                Column(
                     modifier = modifier
-                        .fillMaxWidth()
-                        .padding(4.dp)
+                        .fillMaxSize()
+                        .background(Color.White)
+                        .padding(it),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top
                 ) {
-                    items(
-                        items = weatherData.data!!.list
-                    ) { item: WeatherItem ->
-                        DayRow(
-                            weather = item
-                        )
+                    Spacer(modifier = modifier.height(10.dp))
+
+                    Text(
+                        text = dateFormatter(weatherData.data!!.list[0].dt.toLong()),
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 20.sp,
+                        color = Color.LightGray
+                    )
+
+                    TopCircle(
+                        data = weatherData.data!!
+                    )
+
+                    HumidityWindPressureRow(weather = weatherData.data!!)
+
+                    HorizontalDivider(
+                        color = Color.LightGray
+                    )
+
+                    SunSetAndSunRiseRow(
+                        weather = weatherData.data!!
+                    )
+
+                    Text(
+                        text = "7 Days Forecast",
+                        color = Color.LightGray,
+                        fontSize = 25.sp
+                    )
+
+                    Spacer(modifier = modifier.height(10.dp))
+
+                    LazyColumn(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(4.dp)
+                    ) {
+                        items(
+                            items = weatherData.data!!.list
+                        ) { item: WeatherItem ->
+                            DayRow(
+                                weather = item
+                            )
+                        }
                     }
                 }
             }
