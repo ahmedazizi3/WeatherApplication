@@ -55,5 +55,4 @@ class FavoritesViewModel @Inject constructor(private val favoriteRepository: Fav
     fun getFavoriteByCity(city: String) = viewModelScope.launch {
         favoriteRepository.getFavoriteByCity(city)
     }
-
 }
