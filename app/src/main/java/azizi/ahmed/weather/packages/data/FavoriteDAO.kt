@@ -6,11 +6,15 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import azizi.ahmed.weather.packages.model.FavoriteEntity
+import azizi.ahmed.weather.packages.model.UnitEntity
 import kotlinx.coroutines.flow.Flow
 
 
 @Dao
-interface WeatherDAO {
+interface FavoriteDAO {
+
+//    Favorite Table
+
     @Query("SELECT * from favoriteTable")
     fun getFavorites(): Flow<List<FavoriteEntity>>
 
@@ -28,4 +32,6 @@ interface WeatherDAO {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateFavorite(favoriteEntity: FavoriteEntity)
+
+
 }
