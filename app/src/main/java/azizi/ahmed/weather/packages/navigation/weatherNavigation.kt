@@ -44,11 +44,10 @@ fun WeatherNavigation(
         ) { navBack ->
             navBack.arguments?.getString("city").let { city ->
                 MainScreen(
-                    navController = navController,
+                    city = city,
                     navigateToSearchScreen = {
                         navController.navigate(WeatherScreens.SearchScreen.route)
                     },
-                    city = city,
                     navigateToFavoriteScreen = {
                         navController.navigate(WeatherScreens.FavoriteScreen.route)
                     },

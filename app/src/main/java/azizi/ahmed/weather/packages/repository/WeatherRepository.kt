@@ -7,10 +7,14 @@ import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(private val weatherAPI: WeatherAPI) {
     suspend fun getWeather(
-        cityQuery: String
+        cityQuery: String,
+        unit: String
     ): WeatherDataOrException<Weather, Boolean, Exception> {
         val response = try {
-            weatherAPI.getWeather(query = cityQuery)
+            weatherAPI.getWeather(
+                query = cityQuery,
+                units = unit
+            )
         } catch (exception: Exception) {
             return WeatherDataOrException(exception = exception)
         }
