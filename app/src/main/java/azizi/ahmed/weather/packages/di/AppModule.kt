@@ -1,9 +1,9 @@
 package azizi.ahmed.weather.packages.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import azizi.ahmed.weather.packages.data.WeatherDAO
+import azizi.ahmed.weather.packages.data.FavoriteDAO
+import azizi.ahmed.weather.packages.data.UnitDAO
 import azizi.ahmed.weather.packages.data.WeatherDatabase
 import azizi.ahmed.weather.packages.network.WeatherAPI
 import azizi.ahmed.weather.packages.utils.Constants
@@ -23,7 +23,11 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideWeatherDAO(weatherDatabase: WeatherDatabase): WeatherDAO = weatherDatabase.weatherDAO()
+    fun provideWeatherDAO(weatherDatabase: WeatherDatabase): FavoriteDAO = weatherDatabase.weatherDAO()
+
+    @Singleton
+    @Provides
+    fun provideUnitsDAO(weatherDatabase: WeatherDatabase): UnitDAO = weatherDatabase.unitsDAO()
 
     @Singleton
     @Provides
