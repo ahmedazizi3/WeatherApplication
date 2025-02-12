@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -21,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,7 +34,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import azizi.ahmed.weather.packages.components.mainScreen.WeatherDropDownMenu
+import azizi.ahmed.weather.packages.model.FavoriteEntity
 import azizi.ahmed.weather.packages.screensAndViewModel.favorites.FavoritesViewModel
 
 
@@ -43,6 +48,7 @@ fun WeatherTopBar(
     icon1: ImageVector? = null,
     icon2: ImageVector? = null,
     isMainScreen: Boolean = true,
+    navController: NavController = rememberNavController(),
     favoritesViewModel: FavoritesViewModel = hiltViewModel(),
     elevation: Dp = 0.dp,
     onIcon1Clicked: () -> Unit = {},
@@ -54,6 +60,12 @@ fun WeatherTopBar(
 ) {
     val showDialog = remember {
         mutableStateOf(false)
+    }
+
+    var heartIconClicked = favoritesViewModel.favoriteList.collectAsState().value.filter { item ->
+        (
+                item.city == title.split(", ")[0] && item.country == title.split(", ")[1]
+        )
     }
 
 
@@ -173,11 +185,26 @@ fun WeatherTopBar(
                 } else {
                     IconButton(
                         onClick = {
-                            onIcon3Clicked.invoke()
+                            if(heartIconClicked.isEmpty()) {
+                                favoritesViewModel.insertFavorite(
+                                    FavoriteEntity(
+                                        city = title.split(", ")[0],
+                                        country = title.split(", ")[1]
+                                    )
+                                )
+                            } else{
+                                favoritesViewModel.deleteFavoriteByCity(
+                                    city = title.split(", ")[0]
+                                )
+                            }
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.FavoriteBorder,
+                            imageVector = if (heartIconClicked.isEmpty()) {
+                                Icons.Default.FavoriteBorder
+                            } else {
+                                Icons.Default.Favorite
+                            },
                             contentDescription = "",
                             tint = Color.Red
                         )
@@ -186,5 +213,4 @@ fun WeatherTopBar(
             }
         }
     }
-
 }
