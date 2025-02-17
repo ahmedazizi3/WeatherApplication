@@ -49,12 +49,12 @@ fun SettingsScreen(
     }
 
     val listOfUnits = remember {
-        mutableStateListOf("Metric (C)", "Imperial (F)")
+        mutableStateListOf("Imperial (F)", "Metric (C)")
     }
 
     val choiceFromDB = settingsViewModel.unitList.collectAsState().value
 
-    val defaultChoice = if(choiceFromDB.isEmpty()) listOfUnits[0] else choiceFromDB[0].unit
+    val defaultChoice = if(choiceFromDB.isEmpty()) listOfUnits[1] else choiceFromDB[0].unit
 
     val unitChoice = remember {
         mutableStateOf(defaultChoice)
