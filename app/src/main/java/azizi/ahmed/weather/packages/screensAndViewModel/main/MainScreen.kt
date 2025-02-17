@@ -58,10 +58,8 @@ fun MainScreen(
     city: String?,
     navigateToSearchScreen: () -> Unit = {},
     navigateToFavoriteScreen: () -> Unit = {},
-    navigateToAboutScreen: () -> Unit = {},
     navigateToSettingsScreen: () -> Unit = {}
 ) {
-
 
     val unitFromDB = settingsViewModel.unitList.collectAsState().value
 
